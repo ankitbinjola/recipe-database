@@ -1,0 +1,27 @@
+<div class="card flex justify-content-center">
+    <p-dialog header="Edit Profile" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }" [closable]="false">
+        <form [formGroup]="profileForm">
+            <div class="flex align-items-center gap-3 mb-3">
+                <label for="title" class="font-semibold w-6rem">Recipe Name</label>
+                <input pInputText id="title" class="flex-auto" autocomplete="off" formControlName="title"/>
+            </div>
+            <div class="gap-3 mb-3">
+                <label for="description" class="font-semibold w-6rem">Description </label>
+                <input pInputText id="description" class="flex-auto" autocomplete="off" formControlName="description"/>
+            </div>
+            <div class="gap-3 mb-3">
+                <label for="ingredients" class="font-semibold w-6rem">Ingredients</label>
+                <input pInputText id="ingredients" class="flex-auto" autocomplete="off" formControlName="ingredients"/>
+            </div>
+            <div class="gap-3 mb-3">
+                <label for="cookingTime" class="font-semibold w-6rem">Cooking Time</label>
+                <input pInputText id="cookingTime" class="flex-auto" autocomplete="off" formControlName="cookingTime"/>
+            </div>
+            <div class="gap-2">
+                <p-button label="Cancel" severity="secondary" (onClick)="cancel()" />
+                <p-button label="Save" (onClick)="save()" />
+            </div>
+          </form>
+
+    </p-dialog>
+</div>

@@ -1,0 +1,60 @@
+version: '3.9'
+
+networks:
+  app_network:
+
+services:
+  database:
+    image: mysql:8.0 # MySQL 8.0 image
+    container_name: mysql_container
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password # Root password
+      MYSQL_DATABASE: recipe_db          # Database name
+      MYSQL_USER: root               # Application user
+      MYSQL_PASSWORD: root_password       # Application user's password
+    ports:
+      - "3306:3306" # Expose MySQL on port 3306
+    volumes:
+      - mysql_data:/var/lib/mysql # Persist data even if the container is removed
+    networks:
+      - app_network
+
+  
+  recipe_frontend:
+    build:
+      context: ./frontend/recipe-frontend
+      dockerfile: Dockerfile  # Path to your Angular project
+    container_name: angular-frontend
+    ports:
+      - "80:80"  # Expose Angular frontend on port 80
+    networks:
+      - app_network
+  
+  
+  
+  app:
+    build:
+      context: ./backend/recipes
+      dockerfile: Dockerfile # Dockerfile for your NestJS app
+    container_name: nestjs_app
+    restart: always
+    environment:
+      DB_HOST: database         # Service name of the database
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASS: root_password
+      DB_NAME: recipe_db
+    volumes:
+      - ./backend/recipes:/usr/src/app  # Mount the backend directory into the container
+      - /usr/src/app/node_modules  
+    depends_on:
+      - database # Ensures database is started before the app
+    ports:
+      - "3000:3000" # Expose your NestJS app on port 3000
+    command: npm run start:dev
+    networks:
+      - app_network
+
+volumes:
+  mysql_data:
